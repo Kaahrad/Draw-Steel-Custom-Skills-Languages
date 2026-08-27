@@ -73,7 +73,7 @@ If you'd rather not use GitHub Actions:
 2. Update `"download"` in `module.json` to point at the zip you're about to
    upload for *this* version:
    ```
-   "download": "https://github.com/YOUR-GITHUB-USERNAME/draw-steel-custom-skills-languages/releases/download/v1.0.1/module.zip"
+   "download": "https://github.com/Kaahrad/draw-steel-custom-skills-languages/releases/download/v1.0.1/module.zip"
    ```
 3. Zip the module's contents — `module.json`, `scripts/`, `README.md` —
    with those files at the **root of the zip** (no wrapping folder):
