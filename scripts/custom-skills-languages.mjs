@@ -3,25 +3,40 @@
  *
  * WHAT THIS FILE DOES
  * --------------------
- * On startup, it replaces the system's internal skill and language lists
+ * It replaces the system's internal skill and language lists
  * (`ds.CONFIG.skills.groups`, `ds.CONFIG.skills.list`, and `ds.CONFIG.languages`)
  * with the copies defined below. As shipped, those copies are identical to the
  * official Draw Steel lists, so installing this module changes nothing by itself.
  *
  * To customize your table's skills and languages, edit the objects below,
- * or use the EXAMPLES section near the bottom as a template. See README.md
- * in this module's folder for a full walkthrough.
+ * or use the EXAMPLES section as a template. See README.md in this module's
+ * folder for a full walkthrough.
  *
- * WHY "init"?
- * -----------
- * The Draw Steel system builds `ds.CONFIG` during its own "init" hook, and
- * Foundry always finishes loading a game system's scripts before it loads
- * any module's scripts. That means by the time this module's "init" hook
- * runs, `ds.CONFIG` already exists and is safe to overwrite.
+ * WHY THIS RUNS TWICE
+ * --------------------
+ * The Draw Steel system has a built-in feature (a "Configuration" journal
+ * page, bundled in its own compendium) that automatically re-adds any
+ * "missing" official language to `ds.CONFIG.languages` if it isn't already
+ * present. That reconciliation runs on Foundry's `ready` hook, which is
+ * *after* our module's `init` hook — so if we only set our language list at
+ * `init`, the system quietly re-adds everything we removed a moment later.
+ *
+ * The system also fires a custom `ds.ready` hook right after that
+ * reconciliation finishes. By rebuilding and reapplying our config again at
+ * that point, our version always wins — no matter what the built-in
+ * reconciliation just did.
+ *
+ * Skills don't have this reconciliation mechanism, so setting them once at
+ * `init` is enough. We rebuild them at `ds.ready` too anyway, just for
+ * consistency and to keep this file simple.
  */
 
-Hooks.once("init", () => {
-  // Only do anything if the active game is actually running Draw Steel.
+/**
+ * Build a fresh copy of the skill groups, skill list, and languages, apply
+ * your customizations to them, and push the result into the live system
+ * configuration. Called once at "init" and again at "ds.ready".
+ */
+function applyCustomSkillsAndLanguages() {
   if (game.system.id !== "draw-steel") return;
 
   if (!globalThis.ds?.CONFIG) {
@@ -121,60 +136,64 @@ Hooks.once("init", () => {
   /*  3. LANGUAGES                                                 */
   /* ============================================================ */
   const languages = {
+    // -- Homebrew languages --
+    kelemorian: { label: "Kelemorian" },
     
     // -- Ancestry languages --
-     kelemorian: { label: "Kelemorian" },
-  //  axiomatic: { label: "Axiomatic" },
-  //  caelian: { label: "Caelian" },
-  //  filliaric: { label: "Filliaric" },
-  //  highKuric: { label: "High Kuric" },
-  //  hyrallic: { label: "Hyrallic" },
-  //  illyvric: { label: "Illyvric" },
-  //  kalliak: { label: "Kalliak" },
-  //  kethaic: { label: "Kethaic" },
-  //  khelt: { label: "Khelt" },
- //   khoursirian: { label: "Khoursirian" },
-  //  lowKuric: { label: "Low Kuric" },
-  //  mindspeech: { label: "Mindspeech" },
-  //  protoCtholl: { label: "Proto-Ctholl" },
-  //  szetch: { label: "Szetch" },
-  //  theFirstLanguage: { label: "The First Language" },
-  //  tholl: { label: "Tholl" },
-  //  urollialic: { label: "Urollialic" },
-  //  variac: { label: "Variac" },
-  //  vastariax: { label: "Vastariax" },
-   // vhoric: { label: "Vhoric" },
-  //  voll: { label: "Voll" },
-  //  yllyric: { label: "Yllyric" },
-   // zahariax: { label: "Zahariax" },
-   // zaliac: { label: "Zaliac" },
+    //anjali: { label: "Anjali" },
+    //axiomatic: { label: "Axiomatic" },
+    //caelian: { label: "Caelian" },
+    //filliaric: { label: "Filliaric" },
+    //highKuric: { label: "High Kuric" },
+    //hyrallic: { label: "Hyrallic" },
+    //illyvric: { label: "Illyvric" },
+    //kalliak: { label: "Kalliak" },
+    //kethaic: { label: "Kethaic" },
+    //khelt: { label: "Khelt" },
+    //khoursirian: { label: "Khoursirian" },
+    //lowKuric: { label: "Low Kuric" },
+    //mindspeech: { label: "Mindspeech" },
+    //protoCtholl: { label: "Proto-Ctholl" },
+    //szetch: { label: "Szetch" },
+    //theFirstLanguage: { label: "The First Language" },
+    //tholl: { label: "Tholl" },
+    //urollialic: { label: "Urollialic" },
+    //variac: { label: "Variac" },
+    //vastariax: { label: "Vastariax" },
+    //vhoric: { label: "Vhoric" },
+    //voll: { label: "Voll" },
+    //yllyric: { label: "Yllyric" },
+    //zahariax: { label: "Zahariax" },
+    //zaliac: { label: "Zaliac" },
 
     // -- Human languages (Khoursirian is already listed above) --
-   // higaran: { label: "Higaran" },
-   // khemharic: { label: "Khemharic" },
-   // oaxuatl: { label: "Oaxuatl" },
-   // phaedran: { label: "Phaedran" },
-   // riojan: { label: "Riojan" },
-   // uvalic: { label: "Uvalic" },
-   // vaniric: { label: "Vaniric" },
-   // vasloria: { label: "Vasloria" },
+    //higaran: { label: "Higaran" },
+    //khemharic: { label: "Khemharic" },
+    //oaxuatl: { label: "Oaxuatl" },
+    //phaedran: { label: "Phaedran" },
+    //riojan: { label: "Riojan" },
+    //uvalic: { label: "Uvalic" },
+    //vaniric: { label: "Vaniric" },
+    //vasloria: { label: "Vasloria" },
 
     // -- Dead languages --
-   // highRhyvian: { label: "High Rhyvian" },
+  //  highRhyvian: { label: "High Rhyvian" },
    // khamish: { label: "Khamish" },
-   // kheltivari: { label: "Kheltivari" },
-   // lowRhivian: { label: "Low Rhivian" },
-   // oldVariac: { label: "Old Variac" },
-   // phorialtic: { label: "Phorialtic" },
-   // rallarian: { label: "Rallarian" },
-   // ullorvic: { label: "Ullorvic" },
+    //kheltivari: { label: "Kheltivari" },
+    //lowRhivian: { label: "Low Rhivian" },
+    //oldVariac: { label: "Old Variac" },
+    //phorialtic: { label: "Phorialtic" },
+    //rallarian: { label: "Rallarian" },
+    //ullorvic: { label: "Ullorvic" },
   };
 
   /* ================================================================== */
   /*  >>> YOUR CUSTOMIZATIONS GO HERE <<<                                */
   /*  Everything below is commented out. Uncomment and edit whatever    */
   /*  you want to change. Full explanations are in this module's        */
-  /*  README.md.                                                        */
+  /*  README.md. This whole function runs twice (see note above), so    */
+  /*  whatever you write here just needs to describe the FINAL list you */
+  /*  want — it's safe for these edits to run more than once.           */
   /* ================================================================== */
 
   // --- Remove a skill entirely ---
@@ -216,6 +235,13 @@ Hooks.once("init", () => {
   ds.CONFIG.skills.groups = skillGroups;
   ds.CONFIG.skills.list = skillList;
   ds.CONFIG.languages = languages;
+}
 
-  console.log("Custom Skills & Languages | Skills and languages configured.");
+Hooks.once("init", applyCustomSkillsAndLanguages);
+
+// Reapply after the system's own "add missing official languages back"
+// reconciliation has finished, so our list is always what's actually shown.
+Hooks.once("ds.ready", () => {
+  applyCustomSkillsAndLanguages();
+  console.log("Custom Skills & Languages | Final skills and languages configured.");
 });
