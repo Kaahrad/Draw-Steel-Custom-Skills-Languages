@@ -45,7 +45,7 @@ the same pattern the Draw Steel system itself uses for its own releases.
    git add .
    git commit -m "Initial commit"
    git branch -M main
-   git remote add origin https://github.com/YOUR-GITHUB-USERNAME/draw-steel-custom-skills-languages.git
+   git remote add origin https://github.com/Kaahrad/draw-steel-custom-skills-languages.git
    git push -u origin main
    ```
 
@@ -97,7 +97,7 @@ Once at least one release is published, install it like any other module:
 in Foundry's setup screen, go to **Add-on Modules → Install Module**, and
 paste:
 ```
-https://github.com/YOUR-GITHUB-USERNAME/draw-steel-custom-skills-languages/releases/latest/download/module.json
+https://github.com/Kaahrad/draw-steel-custom-skills-languages/releases/latest/download/module.json
 ```
 Foundry will also detect and offer updates automatically whenever you
 publish a new release.
