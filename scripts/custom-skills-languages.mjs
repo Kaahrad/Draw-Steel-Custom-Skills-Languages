@@ -121,11 +121,9 @@ Hooks.once("init", () => {
   /*  3. LANGUAGES                                                 */
   /* ============================================================ */
   const languages = {
-    // -- Homebrew languages --
-    kelemorian: { label: "Kelemorian" },
     
     // -- Ancestry languages --
-  //  anjali: { label: "Anjali" },
+     kelemorian: { label: "Kelemorian" },
   //  axiomatic: { label: "Axiomatic" },
   //  caelian: { label: "Caelian" },
   //  filliaric: { label: "Filliaric" },
