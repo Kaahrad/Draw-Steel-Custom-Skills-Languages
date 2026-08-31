@@ -129,14 +129,14 @@ function applyCustomSkillsAndLanguages() {
     rumors: { label: "Rumors", group: "lore" },
     society: { label: "Society", group: "lore" },
     strategy: { label: "Strategy", group: "lore" },
-   // timescape: { label: "Timescape", group: "lore" },
+    //timescape: { label: "Timescape", group: "lore" },
   };
 
   /* ============================================================ */
   /*  3. LANGUAGES                                                 */
   /* ============================================================ */
   const languages = {
-    // -- Homebrew languages --
+    -- Homebrew languages --
     kelemorian: { label: "Kelemorian" },
     
     // -- Ancestry languages --
@@ -177,14 +177,14 @@ function applyCustomSkillsAndLanguages() {
     //vasloria: { label: "Vasloria" },
 
     // -- Dead languages --
-  //  highRhyvian: { label: "High Rhyvian" },
-   // khamish: { label: "Khamish" },
+    //highRhyvian: { label: "High Rhyvian" },
+    //khamish: { label: "Khamish" },
     //kheltivari: { label: "Kheltivari" },
     //lowRhivian: { label: "Low Rhivian" },
     //oldVariac: { label: "Old Variac" },
     //phorialtic: { label: "Phorialtic" },
-    //rallarian: { label: "Rallarian" },
-    //ullorvic: { label: "Ullorvic" },
+  //  rallarian: { label: "Rallarian" },
+  //  ullorvic: { label: "Ullorvic" },
   };
 
   /* ================================================================== */
@@ -230,11 +230,20 @@ function applyCustomSkillsAndLanguages() {
   /* ================================================================== */
   /*  Apply everything above to the live system configuration.          */
   /*  Leave this part alone unless you know what you're doing.          */
+  /*                                                                    */
+  /*  NOTE ON LANGUAGES: `languages` is a top-level export of the       */
+  /*  system's config module, so it can't be reassigned directly (JS    */
+  /*  doesn't allow rebinding an imported module export from outside).  */
+  /*  We clear the existing object and copy our values into it instead. */
   /* ================================================================== */
 
   ds.CONFIG.skills.groups = skillGroups;
   ds.CONFIG.skills.list = skillList;
-  ds.CONFIG.languages = languages;
+
+  for (const key of Object.keys(ds.CONFIG.languages)) {
+    delete ds.CONFIG.languages[key];
+  }
+  Object.assign(ds.CONFIG.languages, languages);
 }
 
 Hooks.once("init", applyCustomSkillsAndLanguages);
