@@ -136,7 +136,7 @@ function applyCustomSkillsAndLanguages() {
   /*  3. LANGUAGES                                                 */
   /* ============================================================ */
   const languages = {
-    -- Homebrew languages --
+   // -- Homebrew languages --
     kelemorian: { label: "Kelemorian" },
     
     // -- Ancestry languages --
